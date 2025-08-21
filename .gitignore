@@ -47,3 +47,4 @@ prototypes/*/*
 !prototypes/.gitkeep
 !prototypes/*/
 !prototypes/*/.gitkeep
+.vercel

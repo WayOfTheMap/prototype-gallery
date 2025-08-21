@@ -1,244 +1,339 @@
-# 🎨 Prototype Gallery System
+# Generic Prototype Gallery System
 
-A lightweight, automated system for deploying and sharing HTML/CSS/JavaScript prototypes using Vercel. Perfect for product designers who want to quickly share interactive prototypes with stakeholders.
-
-![Gallery Preview](https://img.shields.io/badge/Status-Ready%20to%20Use-green)
-![Deployment](https://img.shields.io/badge/Deployment-Vercel-black)
-![License](https://img.shields.io/badge/License-MIT-blue)
-
-## ✨ Features
-
-- **🚀 One-Command Deployment** - Deploy all prototypes with `npm run deploy-prototypes`
-- **📁 Organized Structure** - Group prototypes by feature/project
-- **🔍 Command Palette** - Press `⌘K` to search and navigate prototypes
-- **⌨️ Keyboard Navigation** - Press `Esc` in any prototype to return to gallery
-- **🔗 Consistent URLs** - Stable URLs that don't change between deployments
-- **🌐 Public Access** - Share with anyone, no login required
-- **⚡ Smart Sync** - Only deploys changed prototypes
-
-## 🎯 Perfect For
-
-- Product designers sharing early concepts
-- Design teams collaborating on prototypes
-- Quick iteration and feedback cycles
-- Client presentations
-- Design documentation
-
-## 📋 Prerequisites
-
-- Node.js (v14 or higher)
-- npm
-- Free [Vercel account](https://vercel.com/signup)
+A lightweight, reusable system for deploying and sharing HTML/CSS/JavaScript prototypes across multiple projects. Each project gets its own unified gallery deployed to Vercel with all prototypes accessible from a single URL.
 
 ## 🚀 Quick Start
 
-### 1. Clone the Repository
+### For New Projects
 
-```bash
-git clone [your-repo-url]
-cd prototype-gallery
-```
+1. **Clone this repository:**
+   ```bash
+   git clone https://github.com/WayOfTheMap/prototype-gallery.git
+   cd prototype-gallery
+   ```
 
-### 2. Run Setup
+2. **In your project directory, create a configuration file:**
+   ```bash
+   # Create .gallery-config in your project root
+   cat > .gallery-config << 'EOF'
+   PROJECT_NAME="my-project-prototypes"
+   PROJECT_TITLE="My Project Prototypes"
+   PROJECT_DESCRIPTION="Interactive prototypes for My Project"
+   VERCEL_PROJECT_NAME="my-project-prototypes"
+   PROTOTYPES_DIR="./prototypes"
+   EOF
+   ```
 
-```bash
-npm run setup
-```
+3. **Create your deployment script:**
+   ```bash
+   cat > deploy-prototypes.sh << 'EOF'
+   #!/bin/bash
+   GALLERY_REPO_PATH="$HOME/Developer/prototype-gallery"
+   CONFIG_FILE="./.gallery-config"
+   PROTOTYPES_DIR="./prototypes"
 
-This will:
-- Install all dependencies
-- Install Vercel CLI globally
-- Create necessary directories
-- Guide you through Vercel login
+   cd "$GALLERY_REPO_PATH"
+   ./deploy.sh --source-dir "$PROTOTYPES_DIR" --config "$CONFIG_FILE" --verbose
+   EOF
+   chmod +x deploy-prototypes.sh
+   ```
 
-### 3. Create Your First Prototype
-
-```bash
-./new-prototype.sh my-feature my-first-prototype
-```
-
-### 4. Deploy Everything
-
-```bash
-npm run deploy-prototypes
-```
-
-### 5. Access Your Gallery
-
-After first deployment, you'll get a URL like:
-```
-https://gallery-[unique-id].vercel.app
-```
-
-**Bookmark this URL!** It will remain consistent for all future deployments.
+4. **Deploy your prototypes:**
+   ```bash
+   ./deploy-prototypes.sh
+   ```
 
 ## 📁 Project Structure
 
+### This Repository (Generic)
 ```
 prototype-gallery/
-├── prototypes/              # Your prototypes go here
-│   ├── example-feature/     # Feature/project folders
-│   │   └── example-prototype/
-│   │       ├── index.html
-│   │       └── vercel.json
-│   └── [your-features]/     # Create your own feature folders
-│       └── [your-prototypes]/
-├── gallery/                 # Auto-generated gallery (don't edit)
-├── prototype-manager/       # CLI tools
-├── sync-prototypes.js       # Main deployment script
-├── new-prototype.sh         # Create new prototypes
-├── setup.sh                 # First-time setup
-└── package.json
+├── deploy.sh              # Generic deployment script
+├── README.md              # This documentation
+└── gallery/               # Generated gallery files (temporary)
 ```
 
-## 📖 Usage Guide
+### Your Project Repository
+```
+your-project/
+├── prototypes/            # Your HTML prototypes
+│   ├── feature-a/
+│   │   ├── prototype-1.html
+│   │   └── prototype-2.html
+│   └── feature-b/
+│       └── prototype-3.html
+├── .gallery-config        # Configuration file
+└── deploy-prototypes.sh   # Deployment script
+```
 
-### Creating Prototypes
+## ⚙️ Configuration
 
-#### Option 1: Use the helper script
+### .gallery-config File
+
+Create a `.gallery-config` file in your project root with these variables:
+
 ```bash
-./new-prototype.sh feature-name prototype-name
+# Required settings
+PROJECT_NAME="unique-project-identifier"          # Used for internal references
+PROJECT_TITLE="Display Name for Gallery"          # Shown in gallery header
+VERCEL_PROJECT_NAME="vercel-deployment-name"      # Vercel project name
+PROTOTYPES_DIR="./prototypes"                     # Path to prototypes directory
+
+# Optional settings
+PROJECT_DESCRIPTION="Description for your gallery"
+CONTACT_EMAIL="your-email@example.com"
+GITHUB_REPO="https://github.com/your-org/your-repo"
+GALLERY_THEME="default"
+SHOW_DEPLOYMENT_DATES="true"
+ENABLE_SEARCH="true"
 ```
 
-#### Option 2: Manual creation
-1. Create folder: `prototypes/feature-name/prototype-name/`
-2. Add your `index.html`
-3. Run deployment
+### Configuration Examples
 
-### Deploying
-
-Deploy everything with one command:
+**Simple Project:**
 ```bash
-npm run deploy-prototypes
+PROJECT_NAME="design-system-prototypes"
+PROJECT_TITLE="Design System Prototypes"
+VERCEL_PROJECT_NAME="design-system-prototypes"
+PROTOTYPES_DIR="./prototypes"
 ```
 
-This will:
-- ✅ Check Vercel is configured
-- ✅ Scan all prototypes
-- ✅ Deploy changed prototypes
-- ✅ Update the gallery
-- ✅ Give you shareable URLs
+**Complex Project:**
+```bash
+PROJECT_NAME="saas-app-prototypes"
+PROJECT_TITLE="SaaS Application Prototypes"
+PROJECT_DESCRIPTION="Interactive prototypes for our SaaS platform redesign"
+VERCEL_PROJECT_NAME="saas-app-prototypes"
+PROTOTYPES_DIR="./design/prototypes"
+CONTACT_EMAIL="design-team@company.com"
+GITHUB_REPO="https://github.com/company/saas-app"
+```
 
-### Organizing Prototypes
+## 🏗️ How It Works
 
-Structure your prototypes by feature or project:
+### Deployment Process
+
+1. **Scan**: The system scans your prototypes directory for HTML files
+2. **Copy**: All prototypes are copied to a temporary gallery structure
+3. **Generate**: A unified index.html is generated with navigation
+4. **Deploy**: Everything is deployed as a single Vercel project
+5. **Access**: Your gallery is available at `https://your-project-name.vercel.app`
+
+### URL Structure
+
+After deployment, your prototypes are available at:
+```
+https://your-project-name.vercel.app/              # Gallery index
+https://your-project-name.vercel.app/feature-a/prototype-1.html
+https://your-project-name.vercel.app/feature-b/prototype-3.html
+```
+
+### Directory Organization
+
+The system automatically organizes prototypes by directory structure:
+
 ```
 prototypes/
-├── onboarding/
-│   ├── welcome-screen/
-│   ├── tutorial-flow/
-│   └── first-setup/
+├── authentication/
+│   ├── login-form.html      → Authentication → Login Form
+│   └── signup-flow.html     → Authentication → Signup Flow  
 ├── dashboard/
-│   ├── analytics-view/
-│   └── settings-panel/
-└── mobile/
-    ├── ios-app/
-    └── android-app/
+│   └── main-view.html       → Dashboard → Main View
+└── onboarding/
+    ├── welcome.html         → Onboarding → Welcome
+    └── tutorial.html        → Onboarding → Tutorial
 ```
 
-## ⌨️ Keyboard Shortcuts
+## 🔧 Requirements
 
-### In Gallery
-- `⌘K` - Open search palette
-- `Enter` - Navigate to selected prototype
-- `↑↓` - Navigate search results
+### System Dependencies
+- **Node.js** (for gallery generation)
+- **Vercel CLI** (`npm install -g vercel`)
+- **Bash** (for deployment scripts)
+- **Git** (for repository management)
 
-### In Prototypes
-- `Esc` - Return to gallery
+### Setup Verification
+```bash
+# Check if everything is installed
+node --version
+vercel --version
+vercel whoami  # Must be logged in
+```
 
-## 🔧 Configuration
+### First-Time Setup
+```bash
+# Install Vercel CLI globally
+npm install -g vercel
 
-### Consistent URLs
+# Login to Vercel
+vercel login
 
-After first deployment, Vercel creates stable aliases. Your URLs will look like:
-- Gallery: `https://gallery-[project].vercel.app`
-- Prototypes: `https://proto-[name].vercel.app`
+# Test deployment (run from your project directory)
+./deploy-prototypes.sh
+```
 
-These remain consistent across deployments.
+## 📖 Usage Examples
 
-### Public Access
+### Basic HTML Prototype
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Form Prototype</title>
+    <style>/* Your styles */</style>
+</head>
+<body>
+    <h1>Login Form</h1>
+    <!-- Your prototype content -->
+    <script>/* Your JavaScript */</script>
+</body>
+</html>
+```
 
-All prototypes are publicly accessible by default. No authentication required for viewers.
+### Interactive Prototype with External Libraries
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard Prototype</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body>
+    <!-- Alpine.js interactive prototype -->
+    <div x-data="{ tab: 'overview' }">
+        <!-- Your interactive content -->
+    </div>
+</body>
+</html>
+```
 
-## 🎨 For Designers
+## 🎯 Best Practices
 
-### No Technical Knowledge Required
+### File Organization
+- Use descriptive directory names (`authentication`, `dashboard`, `onboarding`)
+- Use descriptive file names (`login-form.html`, `signup-flow.html`)
+- Keep each prototype focused on a single feature or flow
+- Use relative paths for assets within prototypes
 
-1. **Create** - Drop your HTML files in the prototypes folder
-2. **Deploy** - Run `npm run deploy-prototypes`
-3. **Share** - Send the gallery link to stakeholders
+### HTML Structure
+- Include meaningful `<title>` tags (used for gallery navigation)
+- Use semantic HTML for better accessibility
+- Include meta viewport tags for mobile compatibility
+- Keep external dependencies to a minimum
 
-### Tips
+### Development Workflow
+1. Create/modify prototypes locally
+2. Test prototypes by opening HTML files in browser
+3. Run deployment script when ready to share
+4. Share the gallery URL with your team
 
-- Keep prototype names simple (use dashes, not spaces)
-- Organize by project or feature
-- Each prototype needs an `index.html` file
-- Use the gallery URL as your main sharing link
-- Bookmark your gallery URL for quick access
+## 🛠️ Advanced Usage
 
-## 🛠 Troubleshooting
+### Multiple Environments
 
-### "Vercel CLI not found"
+You can have different configurations for different environments:
+
+```bash
+# .gallery-config.dev
+PROJECT_NAME="myapp-prototypes-dev"
+VERCEL_PROJECT_NAME="myapp-prototypes-dev"
+
+# .gallery-config.prod  
+PROJECT_NAME="myapp-prototypes"
+VERCEL_PROJECT_NAME="myapp-prototypes"
+
+# Deploy to different environments
+./deploy.sh --config .gallery-config.dev
+./deploy.sh --config .gallery-config.prod
+```
+
+### Custom Deployment Scripts
+
+Create project-specific deployment logic:
+
+```bash
+#!/bin/bash
+# custom-deploy.sh
+
+# Pre-deployment: Build prototypes
+npm run build-prototypes
+
+# Deploy with custom config
+cd "$HOME/Developer/prototype-gallery"
+./deploy.sh --source-dir ./build/prototypes --config ./.gallery-config
+
+# Post-deployment: Notify team
+curl -X POST "$SLACK_WEBHOOK" -d '{"text":"Prototypes deployed!"}'
+```
+
+### Integration with CI/CD
+
+Add to your GitHub Actions or similar:
+
+```yaml
+- name: Deploy Prototypes
+  run: |
+    cd prototype-gallery
+    ./deploy.sh --source-dir ../my-project/prototypes --config ../my-project/.gallery-config
+```
+
+## 🔍 Troubleshooting
+
+### Common Issues
+
+**"Vercel CLI not found"**
 ```bash
 npm install -g vercel
 ```
 
-### "Not logged in to Vercel"
+**"Not logged in to Vercel"**
 ```bash
 vercel login
 ```
 
-### "Prototypes directory not found"
+**"No prototypes found"**
+- Check that your `PROTOTYPES_DIR` path is correct
+- Ensure your prototypes directory contains `.html` files
+- Verify directory structure matches expected format
+
+**"Deployment failed"**
+- Check Vercel project name is unique and valid
+- Ensure you have permission to create projects in your Vercel account
+- Try deploying with `--verbose` flag for more details
+
+### Debug Mode
+
+Run with verbose output to see detailed information:
 ```bash
-mkdir prototypes
+./deploy.sh --source-dir ./prototypes --config ./.gallery-config --verbose
 ```
-
-### URLs keep changing
-- Ensure each prototype has a unique name in `vercel.json`
-- Run `vercel link` in the gallery folder
-
-## 📦 What's Included
-
-- **Smart Sync System** - Intelligently deploys only changed files
-- **Gallery Generator** - Auto-creates searchable gallery
-- **Prototype Templates** - Ready-to-use HTML templates
-- **Helper Scripts** - Quick commands for common tasks
-- **Full Documentation** - Comprehensive guides for all features
 
 ## 🤝 Contributing
 
-Feel free to submit issues and enhancement requests!
+This is a generic tool designed to work with any project. If you find issues or want to improve the system:
+
+1. Fork this repository
+2. Make your changes to the generic scripts
+3. Test with multiple project configurations  
+4. Submit a pull request
+
+### Development Guidelines
+- Keep all scripts project-agnostic
+- Use configuration files for project-specific settings
+- Maintain backward compatibility when possible
+- Include clear error messages and documentation
 
 ## 📄 License
 
 MIT License - feel free to use this in your projects!
 
-## 🙏 Acknowledgments
+## 🆘 Support
 
-Built with:
-- [Vercel](https://vercel.com) for hosting
-- [Node.js](https://nodejs.org) for scripting
-- Love for simple, effective tools
-
----
-
-## 📚 Additional Resources
-
-### Available Scripts
-
-- `npm run setup` - First-time setup
-- `npm run deploy-prototypes` - Deploy all prototypes
-- `./new-prototype.sh [feature] [name]` - Create new prototype
-- `./deploy-prototype.sh [name]` - Deploy single prototype
-
-### Environment Variables
-
-No environment variables required! Everything works out of the box.
-
-### Support
-
-Having issues? Check the [troubleshooting guide](#-troubleshooting) or open an issue.
+- Create issues in this repository for bugs or feature requests
+- Check existing issues for common problems
+- Review the troubleshooting section above
 
 ---
 
-**Made with ❤️ for designers who build**
+**Happy prototyping! 🎨**

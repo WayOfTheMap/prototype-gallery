@@ -1,0 +1,10 @@
+{
+  "name": "omniverse-prototypes",
+  "buildCommand": "",
+  "outputDirectory": "public",
+  "framework": null,
+  "public": true,
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "alias": ["omniverse-prototypes.vercel.app"]
+}
