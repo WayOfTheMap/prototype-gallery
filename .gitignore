@@ -1,0 +1,49 @@
+# Dependencies
+node_modules/
+*.log
+npm-debug.log*
+
+# Vercel
+.vercel/
+*.local
+
+# Deployment cache
+gallery/deployments.json
+gallery/index.html
+gallery/url-mapping.json
+
+# Config files with personal data
+prototype-manager/config.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor directories and files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+dist/
+build/
+
+# Temporary files
+*.tmp
+temp/
+
+# Personal prototypes (users will create their own)
+prototypes/*/*
+!prototypes/example-feature/
+!prototypes/example-feature/example-prototype/
+
+# But keep the prototypes directory structure
+!prototypes/.gitkeep
+!prototypes/*/
+!prototypes/*/.gitkeep
